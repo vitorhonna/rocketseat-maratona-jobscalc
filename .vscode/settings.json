@@ -1,0 +1,7 @@
+{
+    "editor.wordWrapColumn": 100,
+    "editor.wordWrap": "bounded",
+    "prettier.printWidth": 100,
+    "prettier.singleQuote": true,
+    "prettier.tabWidth": 4
+}

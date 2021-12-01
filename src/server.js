@@ -1,9 +1,12 @@
-const express = require("express");
+const express = require('express');
 const server = express();
-const routes = require("./routes");
+const routes = require('./routes');
+
+// habilita o ejs (template engine)
+server.set('view engine', 'ejs');
 
 // middleware - habilita os arquivos estáticos (public)
-server.use(express.static("public"));
+server.use(express.static('public'));
 
 // routes
 server.use(routes);
