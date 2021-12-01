@@ -2,7 +2,7 @@
 
 <br>
 <div align="center">
-  <a href="https://vitorhonna.github.io/rocketseat-maratona-jobscalc/">
+  <a href="https://github.com/vitorhonna/rocketseat-maratona-jobscalc/">
     <img alt="dev.finances" src="https://github.com/rocketseat-education/maratona-discover-02/blob/main/.github/jobscalc.png" width="80%">
   
   <br>
