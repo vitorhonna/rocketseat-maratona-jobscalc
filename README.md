@@ -4,8 +4,11 @@
 <div align="center">
   <a href="https://vitorhonna.github.io/rocketseat-maratona-jobscalc/">
     <img alt="dev.finances" src="https://github.com/rocketseat-education/maratona-discover-02/blob/main/.github/jobscalc.png" width="80%">
-  </a>
+  
   <br>
+  <img alt="JobsCalc" title="JobsCalc" src="https://i.imgur.com/Veqm7Gh.png" width="220px" /><br>
+  </a>
+  
   App de uma calculadora para trabalhos freelance. <br>
   É possível cadastrar e excluir jobs (projetos) e obter uma estimativa de custo de cada job. <br>
   Servidor em NodeJS, EJS para template engine e SQLite como banco de dados. <br>  
