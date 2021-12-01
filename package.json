@@ -1,0 +1,20 @@
+{
+  "name": "rocketseat-maratona-jobscalc",
+  "version": "1.0.0",
+  "description": "Freelance jobs calculator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vitorhonna/rocketseat-maratona-jobscalc.git"
+  },
+  "keywords": [],
+  "author": "Vitor Honna",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc/issues"
+  },
+  "homepage": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc#readme"
+}
