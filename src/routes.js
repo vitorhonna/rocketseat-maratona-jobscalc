@@ -1,95 +1,204 @@
 const express = require('express');
 const routes = express.Router();
 
-// Em vez disso:
-// const views = __dirname + '/views';
-// adicionar ao server: server.set('views', path.join(__dirname, 'views'));
-// e trocar os paths apenas para os nomes dos arquivos
+const Profile = {
+    data: {
+        name: 'Vitor',
+        avatar: 'https://github.com/vitorhonna.png',
+        'monthly-budget': 5000,
+        'days-per-week': 5,
+        'hours-per-day': 8,
+        'vacation-per-year': 4,
+        'hourly-rate': 75,
+    },
+    controllers: {
+        renderProfilePage: (req, res) => {
+            return res.render('profile', { profile: Profile.data });
+        },
+        update: (req, res) => {
+            const newData = req.body;
 
-const profile = {
-    name: 'Vitor',
-    avatar: 'https://github.com/vitorhonna.png',
-    'monthly-budget': 5000,
-    'days-per-week': 5,
-    'hours-per-day': 8,
-    'vacation-per-year': 4,
-    'hourly-rate': 75,
+            const workWeeksPerYear = 52 - newData['vacation-per-year'];
+
+            const workWeeksPerMonth = workWeeksPerYear / 12;
+
+            const workHoursPerWeek = newData['hours-per-day'] * newData['days-per-week'];
+
+            const workHoursPerMonth = workHoursPerWeek * workWeeksPerMonth;
+
+            const hourlyRate = newData['monthly-budget'] / workHoursPerMonth;
+
+            Profile.data = {
+                ...Profile.data,
+                ...newData,
+                'hourly-rate': hourlyRate,
+            };
+
+            return res.redirect('/profile');
+        },
+    },
 };
 
-const jobs = [
-    {
-        id: 1,
-        name: 'Pizzaria Guloso',
-        'daily-hours': 2,
-        'total-hours': 1,
-        created_at: Date.now(),
+const Job = {
+    data: [
+        {
+            id: 1,
+            name: 'Pizzaria',
+            'daily-hours': 2,
+            'total-hours': 1,
+            created_at: Date.now(),
+        },
+        {
+            id: 2,
+            name: 'OneTwo Project',
+            'daily-hours': 3,
+            'total-hours': 47,
+            created_at: Date.now(),
+        },
+        {
+            id: 3,
+            name: 'Rocketseat Discover',
+            'daily-hours': 5,
+            'total-hours': 50,
+            created_at: Date.now(),
+        },
+    ],
+    controllers: {
+        index: (req, res) => {
+            const updatedJobs = Job.data.map((job) => {
+                const daysToDeadline = Job.services.calculateDaysToDeadline(job);
+                // console.log(daysToDeadline);
+                const status = daysToDeadline <= 0 ? 'done' : 'progress';
+                // const status = 'done';
+
+                const hourlyRate = Profile.data['hourly-rate'];
+                const price = Job.services.calculatePrice(job, hourlyRate);
+
+                return {
+                    ...job,
+                    daysToDeadline,
+                    status,
+                    price,
+                };
+            });
+            return res.render('index', { jobs: updatedJobs, profile: Profile.data });
+        },
+        renderAddJobPage: (req, res) => {
+            return res.render('job');
+        },
+        createJob: (req, res) => {
+            // Estrutura: { name: 'JobName', 'daily-hours': '1', 'total-hours': '5' }
+
+            // Procura o último elemento e, se ele existir, acessa seu id, se não existir, atribui 1
+            const lastId = Job.data[Job.data.length - 1]?.id || 0;
+
+            Job.data.push({
+                id: lastId + 1,
+                name: req.body.name,
+                'daily-hours': req.body['daily-hours'],
+                'total-hours': req.body['total-hours'],
+                created_at: Date.now(),
+            });
+
+            return res.redirect('/');
+        },
+        renderEditJobPage: (req, res) => {
+            const jobId = req.params.id;
+
+            const job = Job.data.find((job) => Number(job.id) === Number(jobId));
+
+            if (!job) {
+                return res.send('Job not found!');
+            }
+
+            const hourlyRate = Profile.data['hourly-rate'];
+
+            job.price = Job.services.calculatePrice(job, hourlyRate);
+            // console.log(job);
+
+            return res.render('job-edit', { job });
+        },
+        update: (req, res) => {
+            const jobId = req.params.id;
+
+            const job = Job.data.find((job) => Number(job.id) === Number(jobId));
+
+            if (!job) {
+                return res.send('Job not found!');
+            }
+
+            // const updatedJob = {
+            //     ...job,
+            //     name: req.body.name,
+            //     'total-hours': req.body['total-hours'],
+            //     'daily-hours': req.body['daily-hours'],
+            // };
+            // Job.data = Job.data.map((job) => {
+            //     if (Number(job.id) === Number(jobId)) {
+            //         job = updatedJob;
+            //     }
+            //     return job;
+            // });
+
+            // Talvez seja mais eficiente fazer assim (Perguntar para o Rotta):
+            const updatedJob = {
+                name: req.body.name,
+                'total-hours': req.body['total-hours'],
+                'daily-hours': req.body['daily-hours'],
+            };
+
+            for (let item in updatedJob) {
+                job[item] = updatedJob[item];
+            }
+
+            return res.redirect(`/job/${jobId}`);
+        },
+        delete: (req, res) => {
+            const jobId = req.params.id;
+
+            Job.data = Job.data.filter((job) => Number(job.id) !== Number(jobId));
+
+            return res.redirect('/');
+        },
     },
-    {
-        id: 2,
-        name: 'OneTwo Project',
-        'daily-hours': 3,
-        'total-hours': 47,
-        created_at: Date.now(),
+    services: {
+        // Calcular o tempo restante de projeto
+        calculateDaysToDeadline: (job) => {
+            const remainingDays = Math.floor(job['total-hours'] / job['daily-hours']);
+            // const remainingDays = (job['total-hours'] / job['daily-hours']).toFixed();
+            // console.log(remainingDays);
+
+            const createdDate = new Date(job.created_at);
+            const dueDay = createdDate.getDate() + Number(remainingDays);
+            const dueDate = createdDate.setDate(dueDay);
+
+            const timeDiffInMs = dueDate - Date.now();
+            const dayInMs = 24 * 60 * 60 * 1000;
+            const timeDiffInDays = Math.floor(timeDiffInMs / dayInMs);
+
+            return timeDiffInDays;
+        },
+        calculatePrice: (job, hourlyRate) => {
+            return hourlyRate * job['total-hours'];
+        },
     },
-];
+};
 
-// Calcular o tempo restante de projeto
-function calculateDaysToDeadline(job) {
-    const remainingDays = Math.floor(job['total-hours'] / job['daily-hours']);
-    // const remainingDays = (job['total-hours'] / job['daily-hours']).toFixed();
-    // console.log(remainingDays);
-
-    const createdDate = new Date(job.created_at);
-    const dueDay = createdDate.getDate() + Number(remainingDays);
-    const dueDate = createdDate.setDate(dueDay);
-
-    const timeDiffInMs = dueDate - Date.now();
-    const dayInMs = 24 * 60 * 60 * 1000;
-    const timeDiffInDays = Math.floor(timeDiffInMs / dayInMs);
-
-    return timeDiffInDays;
-}
-
-// request, response
-routes.get('/', (req, res) => {
-    const updatedJobs = jobs.map((job) => {
-        const daysToDeadline = calculateDaysToDeadline(job);
-        // console.log(daysToDeadline);
-        const status = daysToDeadline <= 0 ? 'done' : 'progress';
-        // const status = 'done';
-        const projectPrice = profile['hourly-rate'] * job['total-hours'];
-
-        return {
-            ...job,
-            daysToDeadline,
-            status,
-            projectPrice,
-        };
-    });
-
-    return res.render('index', { jobs: updatedJobs });
-});
-
-routes.get('/job', (req, res) => res.render('job'));
-
-routes.post('/job', (req, res) => {
-    // Estrutura: { name: 'JobName', 'daily-hours': '1', 'total-hours': '5' }
-
-    // Procura o último elemento e, se ele existir, acessa seu id, se não existir, atribui 1
-    const lastId = jobs[jobs.length - 1]?.id || 1;
-
-    jobs.push({
-        id: lastId + 1,
-        name: req.body.name,
-        'daily-hours': req.body['daily-hours'],
-        'total-hours': req.body['total-hours'],
-        created_at: Date.now(),
-    });
-
-    return res.redirect('/');
-});
-
-routes.get('/job/edit', (req, res) => res.render('job-edit'));
-routes.get('/profile', (req, res) => res.render('profile', { profile }));
+routes.get('/', Job.controllers.index);
+routes.get('/job', Job.controllers.renderAddJobPage);
+routes.post('/job', Job.controllers.createJob);
+routes.get('/job/:id', Job.controllers.renderEditJobPage);
+routes.post('/job/:id', Job.controllers.update);
+routes.post('/job/delete/:id', Job.controllers.delete);
+routes.get('/profile', Profile.controllers.renderProfilePage);
+routes.post('/profile', Profile.controllers.update);
 
 module.exports = routes;
+
+// ANOTAÇÕES:
+
+// Para determinar um caminho padrao para as páginas, em vez disso:
+// const views = __dirname + '/views'; (e em seguida concatenar ao nome de cada página)
+// adicionar ao server: server.set('views', path.join(__dirname, 'views'));
+// e trocar os paths apenas para os nomes dos arquivos
+// Obs: Também é preciso importar o path: const path = require('path');

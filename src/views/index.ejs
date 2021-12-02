@@ -35,10 +35,8 @@
                         Você tem 2 horas livres no seu dia
                     </span>
                     <a href="/profile" id="avatar-profile">
-                        <p>Jakeliny <span>Ver perfil</span></p>
-                        <img
-                            src="https://avatars.githubusercontent.com/u/17316392?s=460&u=6912a91a70bc89745a2079fdcdad3bc3ce370f13&v=4"
-                        />
+                        <p><%= profile.name %> <span>Ver perfil</span></p>
+                        <img src="<%= profile.avatar %>" alt="profile picture" />
                     </a>
                 </section>
 
@@ -76,6 +74,7 @@
                 <h1 class="sr-only">Trabalhos</h1>
 
                 <div class="cards">
+                    <!-- Create Cards -->
                     <% jobs.forEach((job) => { %>
 
                     <div class="card <%= job.status %>" data-id="<%= job.id %> ">
@@ -84,20 +83,27 @@
                         <div class="deadline column">
                             <span>Prazo</span>
                             <p>
-                                <% if (job.status === "progress") { %> <%= job.daysToDeadline %> <%= job.daysToDeadline
-                                == 1 ? "dia" : "dias" %> para a entrega <% } else { %> Prazo encerrado <% } %>
+                                <% if (job.status === "progress") { %>
+                                <!-- -->
+                                <%= job.daysToDeadline %> <%= job.daysToDeadline == 1 ? "dia" : "dias" %> para a entrega
+                                <!-- -->
+                                <% } else { %>
+                                <!-- -->
+                                Prazo encerrado
+                                <!-- -->
+                                <% } %>
                             </p>
                         </div>
                         <div class="amount column">
                             <span>Valor</span>
-                            <p>R$ <%= job.projectPrice.toFixed(2).replace(".",",") %></p>
+                            <p>R$ <%= job.price.toFixed(2).replace(".",",") %></p>
                         </div>
                         <div class="status badge column">
                             <%= job.status === "done" ? "Encerrado" : "Em andamento" %>
                         </div>
                         <div class="actions column flex">
                             <p class="sr-only">Ações</p>
-                            <a href="/job/edit" class="button white edit" title="Editar Job">
+                            <a href="/job/<%= job.id %> " class="button white edit" title="Editar Job">
                                 <img src="/images/edit-24.svg" alt="Editar Job" />
                             </a>
                             <button class="delete button white" title="Excluir Job">
@@ -123,8 +129,6 @@
                     Quer mesmo excluir esse job? <br />
                     Ele será apagado para sempre.
                 </p>
-
-                <p></p>
                 <footer>
                     <a class="button gray" href="#">Cancelar</a>
                     <button class="button red" type="submit" form="delete-job">Excluir Job</button>
