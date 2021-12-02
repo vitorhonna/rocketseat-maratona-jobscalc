@@ -41,7 +41,7 @@
 <!-- ❌✔️ -->
 
 - ✔️ Aula 1 (4h02)
-- ❌ Aula 2 (4h33)
+- ✔️ Aula 2 (4h33)
 - ❌ Aula 3 (3h39)
 - ❌ Aula 4 (4h27)
 - ❌ Aula 5 (1h28)
@@ -49,7 +49,9 @@
 ## 🛰️ Roadmap
 
 <div align="center">
-  <img alt="roadmap jobscalc" src="https://github.com/vitorhonna/rocketseat-maratona-jobscalc/blob/main/images/roadmap_maratona_jobscalc_cropped.png" width="100%">
+  <a href="https://github.com/vitorhonna/rocketseat-maratona-jobscalc/">
+    <img alt="roadmap jobscalc" src="https://github.com/vitorhonna/rocketseat-maratona-jobscalc/blob/main/images/roadmap_maratona_jobscalc_cropped.png" width="100%">
+  </a>
 </div>
 
 ## 📑 Licença
