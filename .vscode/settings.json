@@ -1,7 +1,11 @@
 {
     "editor.wordWrapColumn": 100,
     "editor.wordWrap": "bounded",
-    "prettier.printWidth": 100,
-    "prettier.singleQuote": true,
-    "prettier.tabWidth": 4
+    "prettier.printWidth": 120,
+    "prettier.tabWidth": 4,
+    "html.completion.attributeDefaultValue": "singlequotes",
+    "javascript.preferences.quoteStyle": "single",
+    "typescript.preferences.quoteStyle": "single",
+    "prettier.jsxSingleQuote": true,
+    "prettier.singleQuote": true
 }
