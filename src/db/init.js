@@ -12,7 +12,7 @@ const initDb = {
                 avatar TEXT,
                 monthly_budget INT,
                 days_per_week INT,
-                hour_per_day INT,
+                hours_per_day INT,
                 vacation_per_year INT,
                 hourly_rate INT
             );
@@ -34,15 +34,17 @@ const initDb = {
                 avatar, 
                 monthly_budget,
                 days_per_week,
-                hour_per_day,
-                vacation_per_year
+                hours_per_day,
+                vacation_per_year,
+                hourly_rate
             ) VALUES (
                 "Vitor Honna",
                 "https://github.com/vitorhonna.png",
                 5000,
                 5,
                 6,
-                4
+                4,
+                75
             );
         `);
 
