@@ -3,27 +3,6 @@ const JobUtils = require('../utils/JobUtils');
 const Profile = require('../model/Profile');
 
 module.exports = {
-    index: (req, res) => {
-        const jobs = Job.get();
-        const profile = Profile.get();
-
-        const updatedJobs = jobs.map((job) => {
-            const daysToDeadline = JobUtils.calculateDaysToDeadline(job);
-            const status = daysToDeadline <= 0 ? 'done' : 'progress';
-
-            const hourlyRate = profile['hourly-rate'];
-            const price = JobUtils.calculatePrice(job, hourlyRate);
-
-            return {
-                ...job,
-                daysToDeadline,
-                status,
-                price,
-            };
-        });
-        return res.render('index', { jobs: updatedJobs, profile: profile });
-    },
-
     renderAddJobPage: (req, res) => {
         return res.render('job');
     },
