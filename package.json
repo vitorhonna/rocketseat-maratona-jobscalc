@@ -1,27 +1,30 @@
 {
-  "name": "rocketseat-maratona-jobscalc",
-  "version": "1.0.0",
-  "description": "Freelance jobs calculator",
-  "main": "src/server.js",
-  "scripts": {
-    "dev": "nodemon ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vitorhonna/rocketseat-maratona-jobscalc.git"
-  },
-  "keywords": [],
-  "author": "Vitor Honna",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc/issues"
-  },
-  "homepage": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc#readme",
-  "dependencies": {
-    "ejs": "^3.1.6",
-    "express": "^4.17.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.15"
-  }
+    "name": "rocketseat-maratona-jobscalc",
+    "version": "1.0.0",
+    "description": "Freelance jobs calculator",
+    "main": "src/server.js",
+    "scripts": {
+        "dev": "nodemon .",
+        "init-db": "node src/db/init.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/vitorhonna/rocketseat-maratona-jobscalc.git"
+    },
+    "keywords": [],
+    "author": "Vitor Honna",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc/issues"
+    },
+    "homepage": "https://github.com/vitorhonna/rocketseat-maratona-jobscalc#readme",
+    "dependencies": {
+        "ejs": "^3.1.6",
+        "express": "^4.17.1",
+        "sqlite": "^4.0.23",
+        "sqlite3": "^5.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15"
+    }
 }
