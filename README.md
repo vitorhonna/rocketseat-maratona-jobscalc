@@ -30,6 +30,14 @@
   <strong height="50" width="60">&nbsp; SQLite &nbsp;</strong>
 </div>
 
+## ⚙️ Executar o projeto localmente
+
+1. Clone este repositório
+2. Abra um terminal e navegue até o diretório do repositório 
+3. Instale as dependências: `$ npm install`
+4. Inicie o servidor local: `$ npm run dev`. A mensagem `Server is running on PORT 3000 🚀` será exibida no terminal.
+5. Acesse [`localhost:3000`](http://localhost:3000) pelo navegador :)
+
 ## 📚 Assets
 
 - [Guias para as aulas](https://www.notion.so/JobsCalc-c0bac50ac6344855b8a8c588eb26140e)
