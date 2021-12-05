@@ -43,8 +43,8 @@
 - ✔️ Aula 1 (4h02)
 - ✔️ Aula 2 (4h33)
 - ✔️ Aula 3 (3h39)
-- ❌ Aula 4 (4h27)
-- ❌ Aula 5 (1h28)
+- ✔️ Aula 4 (4h27)
+- ✔️ Aula 5 (1h28)
 
 ## 🛰️ Roadmap
 
