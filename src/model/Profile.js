@@ -25,14 +25,15 @@ module.exports = {
     update: async (newData) => {
         const db = await Database();
 
-        db.run(`UPDATE profile SET
-            name = "${newData.name}",
-            avatar = "${newData.avatar}",
-            monthly_budget = ${newData['monthly-budget']},
-            days_per_week = ${newData['days-per-week']},
-            hours_per_day = ${newData['hours-per-day']},
-            vacation_per_year = ${newData['vacation-per-year']},
-            hourly_rate = ${newData['hourly-rate']}
+        db.run(`
+            UPDATE profile SET
+                name = "${newData.name}",
+                avatar = "${newData.avatar}",
+                monthly_budget = ${newData['monthly-budget']},
+                days_per_week = ${newData['days-per-week']},
+                hours_per_day = ${newData['hours-per-day']},
+                vacation_per_year = ${newData['vacation-per-year']},
+                hourly_rate = ${newData['hourly-rate']}
         `);
 
         await db.close();

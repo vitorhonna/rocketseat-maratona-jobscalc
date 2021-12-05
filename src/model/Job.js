@@ -1,30 +1,66 @@
-let data = [
-    {
-        id: 1,
-        name: 'Pizzaria',
-        'daily-hours': 2,
-        'total-hours': 1,
-        created_at: Date.now(),
-    },
-    {
-        id: 2,
-        name: 'OneTwo Project',
-        'daily-hours': 2,
-        'total-hours': 47,
-        created_at: Date.now(),
-    },
-    {
-        id: 3,
-        name: 'Rocketseat Discover',
-        'daily-hours': 5,
-        'total-hours': 50,
-        created_at: Date.now(),
-    },
-];
+const Database = require('../db/config');
 
 module.exports = {
-    get: () => data,
-    update: (newData) => (data = newData),
-    delete: (id) => (data = data.filter((job) => Number(job.id) !== Number(id))),
-    create: (newJob) => data.push(newJob),
+    get: async () => {
+        const db = await Database();
+
+        const jobs = await db.all(`SELECT * FROM jobs`);
+
+        await db.close();
+
+        // Normalizar dados
+        const normalizedData = jobs.map((job) => {
+            return {
+                id: job.id,
+                name: job.name,
+                'daily-hours': job.daily_hours,
+                'total-hours': job.total_hours,
+                created_at: job.created_at,
+            };
+        });
+
+        return normalizedData;
+    },
+
+    update: async (updatedJob, jobId) => {
+        const db = await Database();
+
+        await db.run(`
+            UPDATE jobs SET
+                name = "${updatedJob.name}",
+                daily_hours = ${updatedJob['daily-hours']},
+                total_hours = ${updatedJob['total-hours']}
+            WHERE id = ${jobId}
+        `);
+
+        await db.close();
+    },
+
+    delete: async (id) => {
+        const db = await Database();
+
+        await db.run(`DELETE FROM jobs WHERE id = ${id}`);
+
+        await db.close();
+    },
+
+    create: async (newJob) => {
+        const db = await Database();
+
+        await db.run(`
+            INSERT INTO jobs (
+                name, 
+                daily_hours, 
+                total_hours, 
+                created_at
+            ) VALUES (
+                "${newJob.name}",
+                ${newJob['daily-hours']},
+                ${newJob['total-hours']},
+                ${newJob.created_at}
+            )
+        `);
+
+        await db.close();
+    },
 };

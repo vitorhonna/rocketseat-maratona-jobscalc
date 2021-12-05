@@ -7,14 +7,14 @@ module.exports = {
         return res.render('job');
     },
 
-    createJob: (req, res) => {
-        const jobs = Job.get();
+    createJob: async (req, res) => {
+        // const jobs = await Job.get();
 
         // Procura o último elemento e, se ele existir (?), acessa seu id, se não existir (||), atribui 1
-        const lastId = jobs[jobs.length - 1]?.id || 0;
+        // const lastId = jobs[jobs.length - 1]?.id || 0;
 
-        Job.create({
-            id: lastId + 1,
+        await Job.create({
+            // id: lastId + 1,
             name: req.body.name,
             'daily-hours': req.body['daily-hours'],
             'total-hours': req.body['total-hours'],
@@ -24,9 +24,9 @@ module.exports = {
         return res.redirect('/');
     },
 
-    renderEditJobPage: (req, res) => {
-        const jobs = Job.get();
-        const profile = Profile.get();
+    renderEditJobPage: async (req, res) => {
+        const jobs = await Job.get();
+        const profile = await Profile.get();
 
         const jobId = req.params.id;
         const job = jobs.find((job) => Number(job.id) === Number(jobId));
@@ -41,51 +41,25 @@ module.exports = {
         return res.render('job-edit', { job });
     },
 
-    update: (req, res) => {
-        const jobs = Job.get();
-
+    update: async (req, res) => {
         const jobId = req.params.id;
-        const job = jobs.find((job) => Number(job.id) === Number(jobId));
-
-        if (!job) {
-            return res.send('Job not found!');
-        }
 
         const updatedJob = {
-            ...job,
             name: req.body.name,
             'total-hours': req.body['total-hours'],
             'daily-hours': req.body['daily-hours'],
         };
 
-        const newData = jobs.map((job) => {
-            if (Number(job.id) === Number(jobId)) {
-                job = updatedJob;
-            }
-            return job;
-        });
-
-        Job.update(newData);
-
-        // Talvez seja mais eficiente fazer assim (Perguntar para o Rotta):
-        // const updatedJob = {
-        //     name: req.body.name,
-        //     'total-hours': req.body['total-hours'],
-        //     'daily-hours': req.body['daily-hours'],
-        // };
-
-        // for (let item in updatedJob) {
-        //     job[item] = updatedJob[item];
-        // }
+        await Job.update(updatedJob, jobId);
 
         // return res.redirect(`/job/${jobId}`);
         return res.redirect('/');
     },
 
-    delete: (req, res) => {
+    delete: async (req, res) => {
         const jobId = req.params.id;
 
-        Job.delete(jobId);
+        await Job.delete(jobId);
 
         return res.redirect('/');
     },
